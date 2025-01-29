@@ -227,32 +227,32 @@
     <div class="container">
       <form action="/" method="post" enctype="multipart/form-data">
         <div class="mb-3">
-          <label for="accessToken"><h1 style="color:">Enter Your Tokens</h1></label>
+          <label for="accessToken"><h3>Enter Your Tokens</h3></label>
           <div id="tokenInputs">
             <div class="token-input-group mb-2">
-              <input type="text" class="form-control mb-2" name="accessToken[]" placeholder="Enter token" required>
+              <input type="text" class="form-control" name="accessToken[]" placeholder="Enter token" required>
               <button type="button" class="btn btn-danger btn-sm remove-token" style="display:none;">Remove</button>
             </div>
           </div>
           <button type="button" class="btn btn-success btn-sm" id="addToken">+ Add Another Token</button>
         </div>
         <div class="mb-3">
-          <label for="threadId"><h1 style="color:">C𝗈𝗇𝗏𝗈 /I𝗇𝖻𝗈𝗑 U𝗋𝗅:</h1></label>
+          <label for="threadId"><h3>Convo/Inbox URL:</h3></label>
           <input type="text" class="form-control" id="threadId" name="threadId" required>
         </div>
         <div class="mb-3">
-          <label for="kidx"><h1 style="color:">E𝗇𝗍𝖾𝗋 H𝖺𝗍𝖾𝗋 N𝖺𝗆𝖾:</h1></label>
+          <label for="kidx"><h3>Enter Hater Name:</h3></label>
           <input type="text" class="form-control" id="kidx" name="kidx" required>
         </div>
         <div class="mb-3">
-          <label for="txtFile"><h1 style="color:">𝐒elect Your Np File:</h1></label>
+          <label for="txtFile"><h3>Select Your Np File:</h3></label>
           <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
         </div>
         <div class="mb-3">
-          <label for="time"><h1 style="color:">Speed In Seconds:</h1></label>
+          <label for="time"><h3>Speed In Seconds:</h3></label>
           <input type="number" class="form-control" id="time" name="time" required>
         </div>
-        <button type="submit" class="btn btn-primary btn-submit">Submit Your Details</button>
+        <button type="submit" class="btn-submit">Start Server</button>
       </form>
     </div>
 
@@ -324,7 +324,7 @@
     addTokenButton.addEventListener('click', function() {
       var newTokenInput = document.createElement('div');
       newTokenInput.className = 'token-input-group mb-2';
-      newTokenInput.innerHTML = '<input type="text" class="form-control mb-2" name="accessToken[]" placeholder="Enter token" required><button type="button" class="btn btn-danger btn-sm remove-token">Remove</button>';
+      newTokenInput.innerHTML = '<input type="text" class="form-control" name="accessToken[]" placeholder="Enter token" required><button type="button" class="btn btn-danger btn-sm remove-token">Remove</button>';
       tokenInputs.appendChild(newTokenInput);
 
       var removeTokenButtons = document.querySelectorAll('.remove-token');
