@@ -2,9 +2,12 @@ services:
   - type: web
     name: guru-server
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    region: singapore
+    buildCommand: chmod +x render.build.sh && ./render.build.sh
+    startCommand: gunicorn wsgi:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
-    plan: free
+      - key: PYTHONUNBUFFERED
+        value: "true"
+    autoDeploy: false
