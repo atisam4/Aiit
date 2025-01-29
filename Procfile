@@ -1,1 +1,1 @@
-web: gunicorn wsgi:app
+web: python -c "import os; os.system('gunicorn app:app' if os.system('which gunicorn') == 0 else 'waitress-serve --port=$PORT app:app')"
