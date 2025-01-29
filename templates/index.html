@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> GURU S3RV9R</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2NzbmYzMDN2d29iaWZ6MXVpeXN6bzdicmF1dHZ2OWEwNTFsZHRqMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4ilFRqgbzbx4c/giphy.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      animation: color-change 14s infinite;
+    }
+
+    /* Animated Text Container */
+    .animated-text {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      text-align: right;
+      z-index: 1000;
+    }
+
+    .text-line {
+      font-size: 24px;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 10px;
+      animation: glow 2s ease-in-out infinite alternate;
+      text-shadow: 0 0 10px #fff;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
+      }
+      to {
+        text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6;
+      }
+    }
+
+    .text-line:nth-child(1) { color: #ff0000; }
+    .text-line:nth-child(2) { color: #00ff00; }
+    .text-line:nth-child(3) { color: #0000ff; }
+    .text-line:nth-child(4) { color: #ffff00; }
+    .text-line:nth-child(5) { color: #ff00ff; }
+
+    /* Container style update for transparency */
+    .container {      
+      max-width: 340px;
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 30px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      margin: 0 auto;
+      margin-top: 10px;
+      color: white;
+      backdrop-filter: blur(5px);
+    }
+
+    .header{
+      text-align: center;
+      padding-bottom: 10px;
+    }
+     .btn-submit {            
+            border-radius: 20px;
+            align-items: center;
+            background-color: #4CAF50;
+            color: white;
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-submit:hover{
+            background-color: red;
+        }
+    .footer{
+      text-align: center;
+      margin-top: 10px;
+      color: #888;
+    }  
+        @keyframes color-change {
+            0% { background-color: red; }
+            14% { background-color: orange; }
+            28% { background-color: yellow; }
+            42% { background-color: green; }
+            57% { background-color: blue; }
+            71% { background-color: indigo; }
+            85% { background-color: violet; }
+            100% { background-color: red; }
+        }
+        input {
+            border: 2px solid;
+            animation: border-color-change 14s infinite;
+        }
+        @keyframes border-color-change {
+            0% { border-color: red; }
+            14% { border-color: orange; }
+            28% { border-color: yellow; }
+            42% { border-color: green; }
+            57% { border-color: blue; }
+            71% { border-color: indigo; }
+            85% { border-color: violet; }
+            100% { border-color: red; }
+        }
+    .footer {
+      color: #B00402; /* Off-Blue color */
+    }
+    .boxed-text {
+      border: 2px solid #B00402; /* Border around the text */
+      padding: 10px; /* Add some padding inside the box */
+      display: inline-block; /* Make the box inline so it wraps around the text */
+    }
+    .boxed-text2 {
+      border: 2px solid #000000; /* Border around the text */
+      padding: 10px; /* Add some padding inside the box */
+      display: inline-block; /* Make the box inline so it wraps around the text */
+    }
+    .footer a {
+      color: #FFFF00; /* Off-Blue color for links */
+      text-decoration: none; /* Remove underline from links */
+    }
+
+    /* Add new styles for active members counter */
+    .active-members {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      z-index: 1000;
+      min-width: 200px;
+    }
+
+    .member-count {
+      font-size: 36px;
+      font-weight: bold;
+      text-align: center;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+      margin-bottom: 10px;
+    }
+
+    .member-list {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .member-item {
+      background: rgba(255, 255, 255, 0.1);
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .member-number {
+      background: #ff0000;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .member-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+
+    .status-active { background: #00ff00; }
+    .status-idle { background: #ffff00; }
+    .status-error { background: #ff0000; }
+  </style>
+</head>
+<body>
+  <!-- Add active members counter -->
+  <div class="active-members">
+    <div class="member-count">
+      {{ active_users|length }}
+      <div style="font-size: 16px;">Active Members</div>
+    </div>
+    <div class="member-list">
+      {% for user in active_users %}
+      <div class="member-item">
+        <div style="display: flex; align-items: center;">
+          <span class="member-number">{{ loop.index }}</span>
+          <span>{{ user.token[:6] }}...</span>
+        </div>
+        <div class="member-status status-{{ user.status }}"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Existing animated text -->
+  <div class="animated-text">
+    <div class="text-line"> GURU POWER SERVER</div>
+    <div class="text-line">UNLIMITED POWER</div>
+    <div class="text-line">SUPER FAST SPEED</div>
+    <div class="text-line">ANTI-BLOCK SYSTEM</div>
+    <div class="text-line">100% WORKING</div>
+  </div>
+
+  <header class="header mt-4">
+    <h1 class="mb-3"> GURU S3RV9R</h1>
+    <h1 class="mt-3">GURU KIING</h1>
+  </header>
+  <div class="container">   
+    <div class="container">
+      <form action="/" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="accessToken"><h1 style="color:">Enter Your Tokens</h1></label>
+          <div id="tokenInputs">
+            <div class="token-input-group mb-2">
+              <input type="text" class="form-control mb-2" name="accessToken[]" placeholder="Enter token" required>
+              <button type="button" class="btn btn-danger btn-sm remove-token" style="display:none;">Remove</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success btn-sm" id="addToken">+ Add Another Token</button>
+        </div>
+        <div class="mb-3">
+          <label for="threadId"><h1 style="color:">C𝗈𝗇𝗏𝗈 /I𝗇𝖻𝗈𝗑 U𝗋𝗅:</h1></label>
+          <input type="text" class="form-control" id="threadId" name="threadId" required>
+        </div>
+        <div class="mb-3">
+          <label for="kidx"><h1 style="color:">E𝗇𝗍𝖾𝗋 H𝖺𝗍𝖾𝗋 N𝖺𝗆𝖾:</h1></label>
+          <input type="text" class="form-control" id="kidx" name="kidx" required>
+        </div>
+        <div class="mb-3">
+          <label for="txtFile"><h1 style="color:">𝐒elect Your Np File:</h1></label>
+          <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
+        </div>
+        <div class="mb-3">
+          <label for="time"><h1 style="color:">Speed In Seconds:</h1></label>
+          <input type="number" class="form-control" id="time" name="time" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">Submit Your Details</button>
+      </form>
+    </div>
+
+    <footer class="footer">
+      <p><span class="boxed-text"><span class="color-spa">Owner</span></span></p>
+      <p><span class="boxed-text"><span class="color-span">GURU KIING</span></span></p>
+      <p><span class="boxed-text"><span class="color-sp">FOLLOW MY FB ACCOUNT</span> <a href="" class="color-s">𝐑equest 𝐒end</a></p>
+    </footer>
+  </div>
+
+  <script>
+    // JavaScript to change footer text color
+    var colors = ['green']; // Define colors
+    var colorIndex = 0;
+
+    setInterval(function() {
+      var footerTexts = document.querySelectorAll('.footer .color-span');
+      footerTexts.forEach(function(span) {
+        span.style.color = colors[colorIndex];
+      });
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 500); 
+  </script>
+  <script>
+    // JavaScript to change footer text color
+    var colors = ['blue']; // Define colors
+    var colorIndex = 0;
+
+    setInterval(function() {
+      var footerTexts = document.querySelectorAll('.footer .color-spa');
+      footerTexts.forEach(function(span) {
+        span.style.color = colors[colorIndex];
+      });
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 500); // Change color every 2 seconds (2000 milliseconds)
+  </script>
+
+  <script>
+    // JavaScript to change footer text color
+    var colors = ['red']; // Define colors
+    var colorIndex = 0;
+
+    setInterval(function() {
+      var footerTexts = document.querySelectorAll('.footer .color-s');
+      footerTexts.forEach(function(span) {
+        span.style.color = colors[colorIndex];
+      });
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 500); 
+  </script>
+  <script>
+    // JavaScript to change footer text color
+    var colors = ['white']; // Define colors
+    var colorIndex = 0;
+
+    setInterval(function() {
+      var footerTexts = document.querySelectorAll('.footer .color-sp');
+      footerTexts.forEach(function(span) {
+        span.style.color = colors[colorIndex];
+      });
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 500); // Change color every 2 seconds (2000 milliseconds)
+  </script>
+  <script>
+    // JavaScript to add token input fields
+    var tokenInputs = document.getElementById('tokenInputs');
+    var addTokenButton = document.getElementById('addToken');
+
+    addTokenButton.addEventListener('click', function() {
+      var newTokenInput = document.createElement('div');
+      newTokenInput.className = 'token-input-group mb-2';
+      newTokenInput.innerHTML = '<input type="text" class="form-control mb-2" name="accessToken[]" placeholder="Enter token" required><button type="button" class="btn btn-danger btn-sm remove-token">Remove</button>';
+      tokenInputs.appendChild(newTokenInput);
+
+      var removeTokenButtons = document.querySelectorAll('.remove-token');
+      removeTokenButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          var tokenInputGroup = button.parentNode;
+          tokenInputs.removeChild(tokenInputGroup);
+        });
+      });
+    });
+
+    var removeTokenButtons = document.querySelectorAll('.remove-token');
+    removeTokenButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var tokenInputGroup = button.parentNode;
+        tokenInputs.removeChild(tokenInputGroup);
+      });
+    });
+  </script>
+
+  <!-- Add auto-refresh script -->
+  <script>
+    // Auto refresh the page every 30 seconds to update member list
+    setInterval(function() {
+      fetch(window.location.href)
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const newDoc = parser.parseFromString(html, 'text/html');
+          
+          // Update active members section
+          const newMembers = newDoc.querySelector('.active-members');
+          const currentMembers = document.querySelector('.active-members');
+          if (newMembers && currentMembers) {
+            currentMembers.innerHTML = newMembers.innerHTML;
+          }
+        });
+    }, 30000);
+  </script>
+</body>
+</html>
