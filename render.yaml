@@ -6,8 +6,9 @@ services:
     dockerfilePath: Dockerfile
     numInstances: 1
     healthCheckPath: /status
-    healthCheckTimeout: 300
-    healthCheckInterval: 60
+    healthCheckTimeout: 100
+    healthCheckInterval: 30
+    startCommand: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
     envVars:
       - key: RENDER_EXTERNAL_URL
         fromService:
