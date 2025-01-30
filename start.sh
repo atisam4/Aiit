@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Install dependencies
-pip install -r requirements.txt
+# Give execute permission to the script
+chmod +x start.sh
 
-# Try to use gunicorn first, fallback to waitress
-if command -v gunicorn &> /dev/null; then
-    gunicorn app:app
-else
-    python -m waitress --port=${PORT:-8000} app:app
+# Start supervisor (which manages Gunicorn)
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+
+# If supervisor fails, fallback to direct Gunicorn
+if [ $? -ne 0 ]; then
+    echo "Supervisor failed to start, falling back to direct Gunicorn..."
+    gunicorn --workers 4 --bind 0.0.0.0:$PORT --timeout 120 --keep-alive 5 --log-level info --access-logfile - --error-logfile - wsgi:app
 fi

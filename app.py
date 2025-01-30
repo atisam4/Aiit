@@ -5,9 +5,20 @@ import time
 from time import sleep
 import threading
 from datetime import datetime
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 from database import init_db, add_user, update_user_status, get_all_users, cleanup_inactive_users
 
 app = Flask(__name__)
+app.config['KEEP_ALIVE_URL'] = os.getenv('KEEP_ALIVE_URL', 'https://your-app-url.onrender.com')
+
+def keep_alive():
+    """Send request to keep the server alive"""
+    try:
+        requests.get(app.config['KEEP_ALIVE_URL'])
+        print("Keep-alive ping sent successfully")
+    except Exception as e:
+        print(f"Keep-alive ping failed: {str(e)}")
 headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
 # Initialize database
@@ -88,6 +99,30 @@ cleanup_thread = threading.Thread(target=cleanup_thread)
 cleanup_thread.daemon = True
 cleanup_thread.start()
 
+# Status endpoint for uptime monitoring
+@app.route('/status', methods=['GET'])
+def status():
+    return jsonify({
+        'status': 'online',
+        'timestamp': datetime.now().isoformat(),
+        'active_users': len(get_all_users())
+    }), 200
+
+# Initialize scheduler
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=keep_alive, trigger="interval", minutes=5)
+scheduler.add_job(func=cleanup_inactive_users, trigger="interval", hours=1)
+scheduler.start()
+
+# Shut down the scheduler when exiting the app
+atexit.register(lambda: scheduler.shutdown())
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+    # Set Keep-Alive URL based on port
+    if port != 5000:  # Production
+        app.config['KEEP_ALIVE_URL'] = f"https://{os.environ.get('RENDER_EXTERNAL_URL', '')}/status"
+    else:  # Development
+        app.config['KEEP_ALIVE_URL'] = f"http://localhost:{port}/status"
+    
     app.run(debug=True, host='0.0.0.0', port=port)

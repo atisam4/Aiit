@@ -1,14 +1,22 @@
 services:
   - type: web
     name: guru-server
-    env: python
+    env: docker
     region: singapore
-    buildCommand: pip install -r requirements.txt
-    startCommand: bash start.sh
+    dockerfilePath: Dockerfile
+    numInstances: 1
+    healthCheckPath: /status
+    healthCheckTimeout: 300
+    healthCheckInterval: 60
     envVars:
+      - key: RENDER_EXTERNAL_URL
+        fromService:
+          type: web
+          name: guru-server
+          property: host
       - key: PYTHON_VERSION
         value: 3.9.18
       - key: PORT
-        value: 8000
+        value: 5000
     autoDeploy: false
-    plan: free
+    plan: standard
