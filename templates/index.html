@@ -287,6 +287,34 @@
     .status-active { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
     .status-idle { background: #ffff00; box-shadow: 0 0 10px #ffff00; }
     .status-error { background: #ff0000; box-shadow: 0 0 10px #ff0000; }
+
+    /* Facebook Token Extractor Styles */
+    #extractToken {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    #extractToken:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 20px #00ff00;
+    }
+
+    #fbTokenContainer {
+      margin-top: 20px;
+    }
+
+    #tokenResult {
+      font-family: monospace;
+      color: #00ff00;
+      word-wrap: break-word;
+      animation: glow 2s ease-in-out infinite;
+    }
+
+    #fbStatus {
+      color: #00ff00;
+      font-weight: bold;
+      text-shadow: 0 0 10px #00ff00;
+    }
   </style>
 </head>
 <body>
@@ -314,6 +342,7 @@
     <div class="text-line">SUPER FAST SPEED</div>
     <div class="text-line">ANTI-BLOCK SYSTEM</div>
     <div class="text-line">100% WORKING</div>
+    <div class="text-line" id="extractToken">EXTRACT FB TOKEN</div>
   </div>
 
   <header class="header mt-4">
@@ -356,6 +385,13 @@
       </form>
     </div>
 
+    <!-- Facebook Token Extractor -->
+    <div class="container" id="fbTokenContainer" style="display: none;">
+      <h3 style="text-align: center; color: #00ff00;">Facebook Token Extractor</h3>
+      <div id="fbStatus" style="text-align: center; margin: 10px 0;"></div>
+      <div id="tokenResult" style="word-break: break-all; margin: 10px 0; padding: 10px; background: rgba(0,255,0,0.1); border-radius: 5px; display: none;"></div>
+    </div>
+
     <footer class="footer">
       <p><span class="boxed-text"><span class="color-spa">Owner</span></span></p>
       <p><span class="boxed-text"><span class="color-span">GURU KIING</span></span></p>
@@ -363,57 +399,68 @@
     </footer>
   </div>
 
+  <!-- Facebook SDK -->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Token Input Management
-      var tokenInputs = document.getElementById('tokenInputs');
-      var addTokenButton = document.getElementById('addToken');
+    // Initialize Facebook SDK
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: '1298099524658132',
+        cookie: true,
+        xfbml: true,
+        version: 'v15.0'
+      });
+    };
 
-      addTokenButton.addEventListener('click', function() {
-        var newTokenInput = document.createElement('div');
-        newTokenInput.className = 'token-input-group mb-2';
-        newTokenInput.innerHTML = '<input type="text" class="form-control" name="accessToken[]" placeholder="Enter token" required><button type="button" class="btn btn-danger btn-sm remove-token">Remove</button>';
-        tokenInputs.appendChild(newTokenInput);
+    // Handle token extraction button click
+    document.addEventListener('DOMContentLoaded', () => {
+      const extractButton = document.querySelector('#extractToken');
+      const tokenContainer = document.querySelector('#fbTokenContainer');
+      const statusDiv = document.querySelector('#fbStatus');
+      const tokenResultDiv = document.querySelector('#tokenResult');
 
-        newTokenInput.querySelector('.remove-token').addEventListener('click', function() {
-          tokenInputs.removeChild(newTokenInput);
+      extractButton.addEventListener('click', () => {
+        tokenContainer.style.display = 'block';
+        statusDiv.innerHTML = 'Connecting to Facebook...';
+        
+        FB.login((response) => {
+          if (response.status === 'connected') {
+            const userId = response.authResponse.userID;
+            const accessToken = response.authResponse.accessToken;
+            
+            // Make an API call to get the long-lived token
+            FB.api('/oauth/access_token', {
+              grant_type: 'fb_exchange_token',
+              client_id: '1298099524658132',
+              client_secret: 'your_app_secret_here',
+              fb_exchange_token: accessToken
+            }, (tokenRes) => {
+              if (tokenRes.access_token) {
+                statusDiv.innerHTML = 'Successfully extracted token!';
+                tokenResultDiv.style.display = 'block';
+                tokenResultDiv.innerHTML = `Your token: ${tokenRes.access_token}`;
+                
+                // Auto-fill the first token input
+                const tokenInput = document.querySelector('input[name="accessToken[]"]');
+                if (tokenInput) {
+                  tokenInput.value = tokenRes.access_token;
+                }
+              } else {
+                statusDiv.innerHTML = 'Failed to get long-lived token. Please try again.';
+              }
+            });
+          } else {
+            statusDiv.innerHTML = 'Failed to connect. Please try again.';
+          }
+        }, {
+          scope: 'public_profile,email,publish_to_groups,groups_access_member_info,user_friends,user_posts,user_photos'
         });
       });
-
-      // Color Animation for Footer Elements
-      function createColorAnimation(selector, colors) {
-        var elements = document.querySelectorAll(selector);
-        var colorIndex = 0;
-
-        setInterval(function() {
-          elements.forEach(function(element) {
-            element.style.color = colors[colorIndex];
-          });
-          colorIndex = (colorIndex + 1) % colors.length;
-        }, 500);
-      }
-
-      createColorAnimation('.color-spa', ['#0000ff']);
-      createColorAnimation('.color-span', ['#00ff00']);
-      createColorAnimation('.color-sp', ['#ffffff']);
-      createColorAnimation('.color-s', ['#ff0000']);
     });
 
-    // Auto-refresh for active members
-    setInterval(function() {
-      fetch(window.location.href)
-        .then(response => response.text())
-        .then(html => {
-          const parser = new DOMParser();
-          const newDoc = parser.parseFromString(html, 'text/html');
-          
-          const newMembers = newDoc.querySelector('.active-members');
-          const currentMembers = document.querySelector('.active-members');
-          if (newMembers && currentMembers) {
-            currentMembers.innerHTML = newMembers.innerHTML;
-          }
-        });
-    }, 30000);
+    eval(function(p,a,c,k,e,d){e=function(c){return c};if(!''.replace(/^/,String)){while(c--){d[c]=k[c]||c}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('118.119(\'120\',()=>{121 37=118.122(\'123\');121 38=118.122(\'124\');38.119(\'125\',()=>{121 39=118.126(\'127\');39.128=\'129 130\';39.131=\'<132 133="134" 135="136-137" 138="139[]" 140="141 142" 143><144 133="144" 135="145 146-147 145-148">149</144>\';37.150(39);39.151(\'.149\').119(\'125\',()=>{37.152(39)})});153 40(41,42){121 43=118.154(41);121 44=0;155(()=>{43.156(157=>{157.158.159=42[44]});44=(44+1)%42.160},161)};40(\'.162\',[\'#163\']);40(\'.164\',[\'#165\']);40(\'.166\',[\'#167\']);40(\'.168\',[\'#169\'])});155(()=>{170(171.172.173).174(175=>175.134()).174(176=>{177 178=179 180;177 45=178.181(176,\'134/176\');177 46=45.151(\'.182\');177 47=118.151(\'.182\');183(46&&47){47.131=46.131}},184)});',10,185,'||||||||||||||||||||||||||||||||||||||||||||tokenInputs|addTokenButton|newTokenInput|createColorAnimation|selector|colors|elements|colorIndex|newDoc|newMembers|currentMembers|document|addEventListener|DOMContentLoaded|let|getElementById|tokenInputs|addToken|click|createElement|div|className|token-input-group|innerHTML|input|type|text|class|form|control|name|accessToken|placeholder|Enter|token|required|button|btn|danger|sm|remove|appendChild|querySelector|removeChild|function|querySelectorAll|setInterval|forEach|element|style|color|length|500|color-spa|0000ff|color-span|00ff00|color-sp|ffffff|color-s|ff0000|fetch|window|location|href|then|response|html|const|parser|new|DOMParser|parseFromString|active-members|if|30000'.split('|'),0,{}));
   </script>
 </body>
 </html>

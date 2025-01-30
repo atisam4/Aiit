@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stored Tokens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .token-card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+        .token-text {
+            width: 100%;
+            height: 60px;
+            margin: 10px 0;
+            padding: 10px;
+            box-sizing: border-box;
+            font-family: monospace;
+        }
+        .user-info {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .timestamp {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #1877f2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stored Tokens</h1>
+        <a href="/" class="btn">Generate New Token</a>
+        
+        {% if tokens %}
+            {% for token in tokens %}
+            <div class="token-card">
+                <div class="user-info">
+                    <strong>User:</strong> {{ token[2] }}
+                    <br>
+                    <strong>User ID:</strong> {{ token[1] }}
+                </div>
+                <div>
+                    <strong>Access Token:</strong>
+                    <textarea class="token-text" readonly>{{ token[3] }}</textarea>
+                </div>
+                <div class="timestamp">
+                    Generated on: {{ token[4] }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No tokens found. Generate a new token to get started.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
